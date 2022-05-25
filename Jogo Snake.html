@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+</head>
+<body>
+    <canvas id="stage" width="600" height="600"></canvas>
+    <script type="text/javascript">
+      window.onload = function(){
+     var stage = document.getElementById('stage')
+     var ctx = stage.getContext("2d")
+     document.addEventListener("keydown",keyPush)
+     setInterval(game, 80)
+     
+     const vel = 1
+     //velocidade
+     var vx = vy = 0
+     //cabeça da cobra
+     var px = 10
+     //cauda
+     var py = 15
+     //tamanho das peças do tabuleiro
+     var tp = 30
+     //quantidade de peças
+     var qp = 20
+     var ax = ay = 15
+     //rastro da cobra, qnd ela anda uma casa, apaga outro
+     var trail = []
+     tail = 5
+     //movimentação da cobra
+     function game (){
+         px += vx
+         py += vy
+         //cobra atravessar o tabuleiro
+         if (px <0){
+             px = qp-1 
+         }
+         if(px >qp-1){
+             px = 0
+         }
+         if (py < 0){
+             py = qp-1
+         } 
+         if (py > qp-1){
+             py = 0
+         }
+          
+
+         ctx.fillStyle ="blue"
+         ctx.fillRect(0,0, stage.width, stage.heigh)
+         //pintar a fruta
+         ctx.fillStyle = "white"
+         //configurar o tamanho da maça com a mesma medida da peça do tabuleiro
+         ctx.fillRect(ax*tp,ay*tp, tp, tp)
+
+         ctx.fillStyle = "ciano"
+         //quando a cobra anda, apaga o quadrado atrás e anda um p frante 
+
+            for(var i = 0; i < trail.length; i++){
+                ctx.fillRect(trail[i].x*tp,trail[i].y*tp, tp-1, tp-1) 
+             
+             if(trail[i].x == px && trail[i].y == py)   
+            {
+                vx = vy =0
+                tail = 5
+
+            }
+           
+            }
+
+    trail.push({x:px,y:py})
+    while(trail.length > tail){
+        trail.shift()
+    }
+     if(ax == px && ay==py){
+         tail++
+         ax = Math.floor(Math.random()*qp)
+         ay = Math.floor(Math.random()*qp)
+
+     }        
+     }
+     function keyPush(event){
+
+         switch(event.keyCode) {
+             case 37:
+              vx = -vel;
+              vy = 0;
+             break;
+
+             case 38:
+              vx = 0;
+              vy = -vel;
+             break;
+
+             case 39:
+              vx = vel;
+              vy = 0;
+             break;
+
+             case 40:
+              vx = 0 ;
+              vy = vel;
+             break;
+              default:
+
+             break; 
+
+
+         }
+     }  
+
+      }
+    </script>
+</body>
+</html>
